@@ -158,12 +158,23 @@
   <h2 id="countText">Best viewed horizontally<br>5</h2>
 </div>
 
-<div class="container" id="videoSection">
-  <video id="video" playsinline preload="auto">
+<div class="container" id="videoSection" style="background:black;">
+  <video 
+    id="video" 
+    playsinline 
+    controls 
+    muted 
+    autoplay 
+    style="width:100%; height:auto;"
+  >
     <source src="https://res.cloudinary.com/dxh9u4ewq/video/upload/v1777441267/0001_1_bwqo1y.mp4" type="video/mp4">
   </video>
-</div>
 
+  <p style="color:white;">
+    If you can read this, the video failed to play.
+  </p>
+</div>
+  
 <div class="container" id="endMessage">
   <h2>You may exit at your convenience</h2>
 </div>
@@ -235,9 +246,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById('videoSection').style.display = 'flex';
 
-  video.play().catch(err => {
-    console.log("Video error:", err);
-  });
+  video.play()
+    .then(() => {
+      console.log("Video playing");
+    })
+    .catch(err => {
+      console.log("Playback failed:", err);
+      alert("Video could not play on this device.");
+    });
 
   video.onended = () => {
     document.getElementById('videoSection').style.display = 'none';
@@ -247,20 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     playMusicFadeIn();
   };
-}
-
-      video.onended = () => {
-        closeCurtains();
-      };
-    }, 2000);
-  }
-
-  video.addEventListener('loadeddata', startVideo);
-
-  // fallback in case event doesn't fire
-  setTimeout(startVideo, 3000);
-
-  video.load();
 }
   function closeCurtains() {
   document.querySelector('.left').classList.remove('open');
