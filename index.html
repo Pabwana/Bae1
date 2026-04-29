@@ -140,8 +140,7 @@
 <div id="rotateWarning">Rotate your device for the best experience</div>
 <div class="border-accent"></div>
 
-<div class="curtain left"></div>
-<div class="curtain right"></div>
+
 
 <!-- Tap to start (fixes mobile autoplay restrictions) -->
 <div class="container" id="tapStart">
@@ -234,21 +233,21 @@ document.addEventListener("DOMContentLoaded", () => {
   function openCurtains() {
   const video = document.getElementById('video');
 
-  // fallback: if video loads enough OR after delay
-  let opened = false;
+  document.getElementById('videoSection').style.display = 'flex';
 
-  function startVideo() {
-    if (opened) return;
-    opened = true;
+  video.play().catch(err => {
+    console.log("Video error:", err);
+  });
 
-    document.querySelector('.left').classList.add('open');
-    document.querySelector('.right').classList.add('open');
+  video.onended = () => {
+    document.getElementById('videoSection').style.display = 'none';
 
-    setTimeout(() => {
-      document.getElementById('videoSection').style.display = 'flex';
-      video.play().catch(err => {
-  console.log("Autoplay blocked:", err);
-});
+    const endMessage = document.getElementById('endMessage');
+    endMessage.style.display = 'flex';
+
+    playMusicFadeIn();
+  };
+}
 
       video.onended = () => {
         closeCurtains();
