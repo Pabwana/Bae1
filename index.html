@@ -79,15 +79,22 @@
       transition: transform 2s ease;
     }
 
-    .left { left: 0; transform: translateX(0); }
-    .right { right: 0; transform: translateX(0); }
+   .left {
+  left: 0;
+}
 
-    .open.left { transform: translateX(-100%); }
-    .open.right { transform: translateX(100%); }
+.right {
+  right: 0;
+}
 
-    .close.left { transform: translateX(0); }
-    .close.right { transform: translateX(0); }
+.left.open {
+  transform: translateX(-100%);
+}
 
+.right.open {
+  transform: translateX(100%);
+}
+    
     /* Orientation lock message */
     #rotateWarning {
       position: fixed;
@@ -250,19 +257,18 @@ document.addEventListener("DOMContentLoaded", () => {
   video.load();
 }
   function closeCurtains() {
-    document.querySelector('.left').classList.remove('open');
-    document.querySelector('.right').classList.remove('open');
+  document.querySelector('.left').classList.remove('open');
+  document.querySelector('.right').classList.remove('open');
 
-    document.querySelector('.left').classList.add('close');
-    document.querySelector('.right').classList.add('close');
+  setTimeout(() => {
+    document.getElementById('videoSection').style.display = 'none';
 
-    setTimeout(() => {
-      document.getElementById('videoSection').style.display = 'none';
-      const endMessage = document.getElementById('endMessage');
-      endMessage.style.display = 'flex';
-      playMusicFadeIn();
-    }, 2000);
-  }
+    const endMessage = document.getElementById('endMessage');
+    endMessage.style.display = 'flex';
+
+    playMusicFadeIn();
+  }, 2000);
+}
   function playMusicFadeIn() {
     const audio = document.getElementById('endMusic');
     audio.volume = 0;
