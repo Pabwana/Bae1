@@ -251,27 +251,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openCurtains() {
   const video = document.getElementById('video');
+  const videoSection = document.getElementById('videoSection');
 
-  // open curtains
-  document.querySelector('.left').classList.add('open');
-  document.querySelector('.right').classList.add('open');
+  // show video FIRST
+  videoSection.style.display = 'flex';
 
-  // show video after curtains move
-  setTimeout(() => {
-    document.getElementById('videoSection').style.display = 'flex';
+  // start video
+  video.play().catch(err => {
+    console.log("Playback failed:", err);
+  });
 
-    video.play()
-      .then(() => {
-        console.log("Video playing");
-      })
-      .catch(err => {
-        console.log("Playback failed:", err);
-      });
+  // THEN open curtains
+  requestAnimationFrame(() => {
+    document.querySelector('.left').classList.add('open');
+    document.querySelector('.right').classList.add('open');
+  });
 
-    video.onended = () => {
-      closeCurtains();
-    };
-  }, 1800);
+  video.onended = () => {
+    closeCurtains();
+  };
 }
   function closeCurtains() {
   // close curtains again
