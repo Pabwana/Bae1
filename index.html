@@ -68,6 +68,12 @@
       border-radius: 10px;
     }
 
+    #videoSection {
+  position: relative;
+  z-index: 20;
+  background: black;
+}
+
     /* Curtains */
     .curtain {
       position: fixed;
@@ -77,6 +83,7 @@
       background: linear-gradient(to bottom, #ba5908, #8c3f05);
       z-index: 10;
       transition: transform 2s ease;
+      will-change: transform;
     }
 
    .left {
@@ -249,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   }
 
-  video.addEventListener('canplay', startVideo);
+  video.addEventListener('loadeddata', startVideo);
 
   // fallback in case event doesn't fire
   setTimeout(startVideo, 3000);
