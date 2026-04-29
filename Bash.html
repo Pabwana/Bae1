@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Special</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: snow;
+      overflow: hidden;
+    }
+
+    .border-accent {
+      position: fixed;
+      border: 6px solid #ba5908;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      box-sizing: border-box;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    button {
+      background-color: #ba5908;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    input {
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    #countdown, #videoSection, #endMessage, #tapStart {
+      display: none;
+    }
+
+    video {
+      max-width: 100%;
+      max-height: 100vh;
+      border-radius: 10px;
+    }
+
+    /* Curtains */
+    .curtain {
+      position: fixed;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(to bottom, #ba5908, #8c3f05);
+      z-index: 10;
+      transition: transform 2s ease;
+    }
+
+    .left { left: 0; transform: translateX(0); }
+    .right { right: 0; transform: translateX(0); }
+
+    .open.left { transform: translateX(-100%); }
+    .open.right { transform: translateX(100%); }
+
+    .close.left { transform: translateX(0); }
+    .close.right { transform: translateX(0); }
+
+    /* Orientation lock message */
+    #rotateWarning {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 999;
+    }
+
+    @media (orientation: portrait) {
+      #rotateWarning {
+        display: flex;
+      }
+    }
+
+    /* Loading screen */
+    #loading {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      font-size: 20px;
+      color: #ba5908;
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="loading">Preparing your surprise...</div>
+<div id="rotateWarning">Rotate your device for the best experience</div>
+<div class="border-accent"></div>
+
+<div class="curtain left"></div>
+<div class="curtain right"></div>
+
+<!-- Tap to start (fixes mobile autoplay restrictions) -->
+<div class="container" id="tapStart">
+  <h2>Tap to Begin</h2>
+  <button onclick="enableAudio()">Start</button>
+</div>
+
+<div class="container" id="loginSection">
+  <h2>Enter Password</h2>
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="checkPassword()">Enter</button>
+</div>
+
+<div class="container" id="countdown">
+  <h2 id="countText">Best viewed horizontally<br>5</h2>
+</div>
+
+<div class="container" id="videoSection">
+  <video id="video">
+    <source src="https://res.cloudinary.com/dxh9u4ewq/video/upload/v1777441267/0001_1_bwqo1y.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="container" id="endMessage">
+  <h2>You may exit at your convenience</h2>
+</div>
+
+<audio id="endMusic">
+  <source src="Fast.mp3.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const correctPassword = "2007"; // CHANGE THIS
+
+  window.onload = () => {
+    setTimeout(() => {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('tapStart').style.display = 'flex';
+    }, 1500);
+  };
+
+  function enableAudio() {
+    document.getElementById('tapStart').style.display = 'none';
+    document.getElementById('loginSection').style.display = 'flex';
+  }
+
+  function checkPassword() {
+    const input = document.getElementById('password').value;
+    if (input === correctPassword) {
+      document.getElementById('loginSection').style.display = 'none';
+      startCountdown();
+    } else {
+      alert('Wrong password');
+    }
+  }
+
+  function startCountdown() {
+    const countdownDiv = document.getElementById('countdown');
+    const text = document.getElementById('countText');
+    countdownDiv.style.display = 'flex';
+
+    let count = 5;
+    const interval = setInterval(() => {
+      text.innerHTML = 'Best viewed horizontally<br>' + count;
+      count--;
+
+      if (count < 0) {
+        clearInterval(interval);
+        countdownDiv.style.display = 'none';
+        openCurtains();
+      }
+    }, 1000);
+  }
+
+  function openCurtains() {
+  const video = document.getElementById('video');
+
+  // fallback: if video loads enough OR after delay
+  let opened = false;
+
+  function startVideo() {
+    if (opened) return;
+    opened = true;
+
+    document.querySelector('.left').classList.add('open');
+    document.querySelector('.right').classList.add('open');
+
+    setTimeout(() => {
+      document.getElementById('videoSection').style.display = 'flex';
+      video.play();
+
+      video.onended = () => {
+        closeCurtains();
+      };
+    }, 2000);
+  }
+
+  video.addEventListener('canplay', startVideo);
+
+  // fallback in case event doesn't fire
+  setTimeout(startVideo, 3000);
+
+  video.load();
+}
+  function closeCurtains() {
+    document.querySelector('.left').classList.remove('open');
+    document.querySelector('.right').classList.remove('open');
+
+    document.querySelector('.left').classList.add('close');
+    document.querySelector('.right').classList.add('close');
+
+    setTimeout(() => {
+      document.getElementById('videoSection').style.display = 'none';
+      const endMessage = document.getElementById('endMessage');
+      endMessage.style.display = 'flex';
+      playMusicFadeIn();
+    }, 2000);
+  }
+  function playMusicFadeIn() {
+    const audio = document.getElementById('endMusic');
+    audio.volume = 0;
+    audio.play();
+
+    let vol = 0;
+    const fade = setInterval(() => {
+      if (vol < 1) {
+        vol += 0.02;
+        audio.volume = vol;
+      } else {
+        clearInterval(fade);
+      }
+    }, 200);
+  }
+</script>
+
+</body>
+</html>
