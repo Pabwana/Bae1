@@ -258,6 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   videoSection.style.display = 'flex';
 
+  video.style.visibility = 'visible';
   video.play().catch(err => {
     console.log("Playback failed:", err);
   });
@@ -280,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // stop showing last paused frame
   video.pause();
-  video.currentTime = 0;
+  video.style.visibility = 'hidden';
 
   // close curtains smoothly
   leftCurtain.classList.remove('open');
