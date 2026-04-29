@@ -168,13 +168,13 @@
 <script>
   const correctPassword = "2007"; // CHANGE THIS
 
-  window.onload = () => {
-    setTimeout(() => {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('tapStart').style.display = 'flex';
-    }, 1500);
-  };
-
+  document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('tapStart').style.display = 'flex';
+  }, 1500);
+});
+  
   function enableAudio() {
     document.getElementById('tapStart').style.display = 'none';
     document.getElementById('loginSection').style.display = 'flex';
