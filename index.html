@@ -58,7 +58,7 @@
       font-size: 16px;
     }
 
-    #countdown, #videoSection, #endMessage, #tapStart, #loginSection {
+    #countdown, #videoSection, #endMessage, #tapStart {
       display: none;
     }
 
@@ -152,7 +152,7 @@
 </div>
 
 <div class="container" id="videoSection">
-  <video id="video" playsinline preload="auto">
+  <video id="video">
     <source src="https://res.cloudinary.com/dxh9u4ewq/video/upload/v1777441267/0001_1_bwqo1y.mp4" type="video/mp4">
   </video>
 </div>
@@ -168,13 +168,13 @@
 <script>
   const correctPassword = "2007"; // CHANGE THIS
 
-  document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('tapStart').style.display = 'flex';
-  }, 1500);
-});
-  
+  window.onload = () => {
+    setTimeout(() => {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('tapStart').style.display = 'flex';
+    }, 1500);
+  };
+
   function enableAudio() {
     document.getElementById('tapStart').style.display = 'none';
     document.getElementById('loginSection').style.display = 'flex';
@@ -223,9 +223,7 @@
 
     setTimeout(() => {
       document.getElementById('videoSection').style.display = 'flex';
-      video.play().catch(err => {
-  console.log("Autoplay blocked:", err);
-});
+      video.play();
 
       video.onended = () => {
         closeCurtains();
@@ -240,6 +238,7 @@
 
   video.load();
 }
+
   function closeCurtains() {
     document.querySelector('.left').classList.remove('open');
     document.querySelector('.right').classList.remove('open');
@@ -257,9 +256,7 @@
   function playMusicFadeIn() {
     const audio = document.getElementById('endMusic');
     audio.volume = 0;
-    audio.play().catch(err => {
-  console.log("Audio blocked:", err);
-});
+    audio.play();
 
     let vol = 0;
     const fade = setInterval(() => {
