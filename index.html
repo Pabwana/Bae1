@@ -166,8 +166,7 @@
 <div class="container" id="videoSection" style="background:black;">
   <video 
     id="video" 
-    playsinline 
-    controls 
+    playsinline  
     autoplay 
     style="width:100%; height:auto;"
   >
@@ -273,17 +272,36 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 }
   function closeCurtains() {
-  // close curtains again
-  document.querySelector('.left').classList.remove('open');
-  document.querySelector('.right').classList.remove('open');
+  const leftCurtain = document.querySelector('.left');
+  const rightCurtain = document.querySelector('.right');
+  const videoSection = document.getElementById('videoSection');
+  const endMessage = document.getElementById('endMessage');
+  const video = document.getElementById('video');
 
+  // stop showing last paused frame
+  video.pause();
+  video.currentTime = 0;
+
+  // close curtains smoothly
+  leftCurtain.classList.remove('open');
+  rightCurtain.classList.remove('open');
+
+  // wait for curtain animation to finish
   setTimeout(() => {
-    document.getElementById('videoSection').style.display = 'none';
 
-    const endMessage = document.getElementById('endMessage');
+    // hide video completely
+    videoSection.style.display = 'none';
+
+    // hide curtains after closing
+    leftCurtain.style.display = 'none';
+    rightCurtain.style.display = 'none';
+
+    // show final message
     endMessage.style.display = 'flex';
 
+    // start ending music
     playMusicFadeIn();
+
   }, 1800);
 }
   function playMusicFadeIn() {
