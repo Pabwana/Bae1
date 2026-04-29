@@ -78,7 +78,7 @@
 }
 
     /* Curtains */
-    .curtain {
+  .curtain {
   position: fixed;
   top: 0;
   width: 50%;
@@ -87,6 +87,7 @@
   z-index: 100;
   transition: transform 1.8s ease-in-out;
   will-change: transform;
+  display: none;
 }
 
 .left {
@@ -253,15 +254,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const video = document.getElementById('video');
   const videoSection = document.getElementById('videoSection');
 
-  // show video FIRST
+  document.querySelector('.left').style.display = 'block';
+  document.querySelector('.right').style.display = 'block';
+
   videoSection.style.display = 'flex';
 
-  // start video
   video.play().catch(err => {
     console.log("Playback failed:", err);
   });
 
-  // THEN open curtains
   requestAnimationFrame(() => {
     document.querySelector('.left').classList.add('open');
     document.querySelector('.right').classList.add('open');
