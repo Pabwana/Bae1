@@ -58,7 +58,7 @@
       font-size: 16px;
     }
 
-    #countdown, #videoSection, #endMessage, #tapStart {
+    #countdown, #videoSection, #endMessage, #tapStart, #loginSection {
       display: none;
     }
 
@@ -152,7 +152,7 @@
 </div>
 
 <div class="container" id="videoSection">
-  <video id="video">
+  <video id="video" playsinline preload="auto">
     <source src="https://res.cloudinary.com/dxh9u4ewq/video/upload/v1777441267/0001_1_bwqo1y.mp4" type="video/mp4">
   </video>
 </div>
@@ -223,7 +223,9 @@
 
     setTimeout(() => {
       document.getElementById('videoSection').style.display = 'flex';
-      video.play();
+      video.play().catch(err => {
+  console.log("Autoplay blocked:", err);
+});
 
       video.onended = () => {
         closeCurtains();
@@ -255,7 +257,9 @@
   function playMusicFadeIn() {
     const audio = document.getElementById('endMusic');
     audio.volume = 0;
-    audio.play();
+    audio.play().catch(err => {
+  console.log("Audio blocked:", err);
+});
 
     let vol = 0;
     const fade = setInterval(() => {
