@@ -163,7 +163,6 @@
     id="video" 
     playsinline 
     controls 
-    muted 
     autoplay 
     style="width:100%; height:auto;"
   >
@@ -209,9 +208,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
   
   function enableAudio() {
-    document.getElementById('tapStart').style.display = 'none';
-    document.getElementById('loginSection').style.display = 'flex';
-  }
+  const video = document.getElementById('video');
+
+  // unlock audio on mobile
+  video.muted = false;
+
+  document.getElementById('tapStart').style.display = 'none';
+  document.getElementById('loginSection').style.display = 'flex';
+}
 
   function checkPassword() {
     const input = document.getElementById('password').value;
